@@ -1,51 +1,51 @@
 package com.example.quiz05;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
-public class LevelActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class LevelActivity extends AppCompatActivity implements LevelAdapter.ItemListener {
+    RecyclerView recyclerView;
+    LevelAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level);
+        initAdapter();
+    }
+    private void initAdapter() {
+        recyclerView = findViewById(R.id.level_recycler);
+        ArrayList<QuestionModel> listModel = new ArrayList<>();
+        QuestionModel questionModel1 = new QuestionModel("1 уровень",
+                "Зимой и летом одним цветом?",
+                "Ель", "Ель", "Яйцо",
+                "Кровь", "Президент");
+        QuestionModel questionModel2 = new QuestionModel("2 уровень",
+                "H2o что это?",
+                "Вода", "огонь", "Вода",
+                "Уголь", "Соль");
+        QuestionModel questionModel3 = new QuestionModel("3 уровень",
+                "Зимой и летом одним цветом",
+                "Ель", "Ель", "Яйцр",
+                "Кровь", "Президент");
+        listModel.add(questionModel1);
+        listModel.add(questionModel2);
+        listModel.add(questionModel3);
+        adapter = new LevelAdapter(listModel,this);
+        recyclerView.setAdapter(adapter);
+    }
 
-        findViewById(R.id.first_level).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                QuestionModel questionModel = new QuestionModel();
-                questionModel.setCurrentLevel("1 Уровень");
-                questionModel.setQuestion("Что первое в мире появилось");
-                questionModel.setFirstVariant("Курица");
-                questionModel.setSecondVariant("Яйцо");
-                questionModel.setThirdVariant("Петух");
-                questionModel.setFourVariant("Скорлупа");
-                questionModel.setAnswer("Курица");
-                Intent intent = new Intent(LevelActivity.this, GameActivity.class);
-                intent.putExtra("firstModel",questionModel);
-                startActivity(intent);
-            }
-        });
-
-        findViewById(R.id.second_level).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                QuestionModel questionModel = new QuestionModel();
-                questionModel.setCurrentLevel("2 Уровень");
-                questionModel.setQuestion("Зимой и летом одним цветом");
-                questionModel.setFirstVariant("Кровь");
-                questionModel.setSecondVariant("Глаза");
-                questionModel.setThirdVariant("Ель");
-                questionModel.setFourVariant("Президент");
-                questionModel.setAnswer("Ель");
-                Intent intent = new Intent(LevelActivity.this, GameActivity.class);
-                intent.putExtra("secondModel",questionModel);
-                startActivity(intent);
-            }
-        });
-
+    @Override
+    public void onItemClick(QuestionModel model) {
+        Intent intent = new Intent(LevelActivity.this,GameActivity.class);
+        intent.putExtra("model",model);
+        startActivity(intent);
     }
 }
